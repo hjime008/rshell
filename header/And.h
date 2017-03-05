@@ -14,6 +14,7 @@ class And : public Connectors
     // was executed
     void execute();
     
+    void test();
     
     //this purpose of this function is to seperate the entire
     //string by the connectors in order to isolate the commands and 

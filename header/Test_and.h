@@ -1,19 +1,22 @@
-#ifndef OR_H
-#define OR_H
+#ifndef TEST_AND_H
+#define TEST_AND_H
+
 #include "../header/Connectors.h"
 
 //inherits from composite class
-class Or : public Connectors
+class Test_and : public Connectors
 {
     public:
     // constructor uses composite constructor
-    Or(Base* left, Base* right) : Connectors(left, right) {}
+    Test_and(Base* left, Base* right) : Connectors(left, right) {}
     
-    // this function will execute the left or right child if the left child 
-    // was not executed
+    // this function will execute the left and right child if the left child 
+    // was executed
     void execute();
     
     
+    // this function is used to execute the test command. this test to see if the 
+    // arguments will pass or fail then return that value;
     void test();
     
     
@@ -25,6 +28,7 @@ class Or : public Connectors
     //this function will recursivly call itself too delete all the pointers
     //of each child node and their children
     void delete_tree(Base* node);
+
 };
 
 #endif

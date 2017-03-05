@@ -16,6 +16,9 @@ class Connectors : public Base
     virtual void execute() = 0;
     
     
+    virtual void test() = 0;
+    
+    
     //this purpose of this function is to seperate the entire
     //string by the connectors in order to isolate the commands and 
     //arguments

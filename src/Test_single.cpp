@@ -1,33 +1,34 @@
 #include "../header/Base.h"
-#include "../header/Single.h"
+#include "../header/Test_single.h"
 
-Single::Single(Base* child) : Base()
+Test_single::Test_single(Base* child) : Base()
 {
     this->left_child = child;
     this->left_child->parent = this;
 }
 
 
-//will execute its single child
-void Single::execute()
+//will execute its Test_single child
+void Test_single::execute()
 {
-    left_child->execute();
+    test();
+}
+
+// this function is used to execute the test command. this test to see if the 
+// arguments will pass or fail then return that value;
+void Test_single::test()
+{
+    left_child->test();
     if (left_child->executed == true)
     {
         this->executed = true;
     }
 }
 
-void Single::test()
-{
-    
-}
-
-
 //this purpose of this function is to seperate the entire
 //string by the connectors in order to isolate the commands and 
 //arguments
-void Single::parse()
+void Test_single::parse()
 {
      left_child->parse();
 }
@@ -35,7 +36,7 @@ void Single::parse()
 
 //this function will recursivly call itself too delete all the pointers
 //of each child node and their children
-void Single::delete_tree(Base* node)
+void Test_single::delete_tree(Base* node)
 {
     if (node->left_child != 0)
     {

@@ -1,21 +1,21 @@
-#ifndef OR_H
-#define OR_H
+#ifndef TEST_OR_H
+#define TEST_OR_H
 #include "../header/Connectors.h"
 
 //inherits from composite class
-class Or : public Connectors
+class Test_or : public Connectors
 {
     public:
     // constructor uses composite constructor
-    Or(Base* left, Base* right) : Connectors(left, right) {}
+    Test_or(Base* left, Base* right) : Connectors(left, right) {}
     
     // this function will execute the left or right child if the left child 
     // was not executed
     void execute();
     
-    
+    // this function is used to execute the test command. this test to see if the 
+    // arguments will pass or fail then return that value;
     void test();
-    
     
     //this purpose of this function is to seperate the entire
     //string by the connectors in order to isolate the commands and 

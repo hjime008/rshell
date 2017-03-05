@@ -21,6 +21,8 @@ class Base
     // the commands
     virtual void execute() = 0;
     
+    virtual void test() = 0;
+    
     //function used to split the string of commands into parts so we can
     //execute.
     virtual void parse() = 0;

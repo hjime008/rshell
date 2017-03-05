@@ -1,34 +1,40 @@
 #include "../header/Base.h"
 #include "../header/Connectors.h"
-#include "../header/And.h"
+#include "../header/Test_or.h"
 
 
-// this function will execute the left and right child if the left child 
-// was executed
-void And::execute()
+// this function will execute the left or right child if the left child 
+// was not executed
+void Test_or::execute()
 {
-    left_child->execute();
-        
-    if (left_child->executed == true)
-    {
-        right_child->execute(); //if left executed
-        this->executed = true;
-    }
+    test();
 }
 
-
-// this connector type will not make use of the test function.
-// it is only used by Test_and Test_or Test_semicolon Test_single
-void And::test()
+// this function is used to execute the test command. this test to see if the 
+// arguments will pass or fail then return that value;
+void Test_or::test()
 {
+    left_child->test();
     
+    if (left_child->executed == false)
+    {
+        right_child->execute();
+        if (right_child->executed == true)
+        {
+            this->executed = true;
+        }
+    }
+    else
+    {
+        this->executed = true;
+    }
 }
 
 
 //this purpose of this function is to seperate the entire
 //string by the connectors in order to isolate the commands and 
 //arguments
-void And::parse()
+void Test_or::parse()
 {
     left_child->parse();
     right_child->parse();
@@ -37,7 +43,7 @@ void And::parse()
 
 //this function will recursivly call itself too delete all the pointers
 //of each child node and their children
-void And::delete_tree(Base* node)
+void Test_or::delete_tree(Base* node)
 {
     if (node->left_child != 0)
     {

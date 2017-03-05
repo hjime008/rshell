@@ -1,10 +1,14 @@
 #include "../header/Base.h"
 #include "../header/Single.h"
+#include "../header/Test_single.h"
 #include "../header/Connectors.h"
 #include "../header/And.h"
+#include "../header/Test_and.h"
 #include "../header/Arg.h"
 #include "../header/Or.h"
 #include "../header/Semicolon.h"
+#include "../header/Test_or.h"
+#include "../header/Test_semicolon.h"
 #include "../header/shellprompt.h"
 
 #include <unistd.h>

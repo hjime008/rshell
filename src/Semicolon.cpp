@@ -24,6 +24,12 @@ void Semicolon::parse()
     right_child->parse();
 }
 
+// this connector type will not make use of the test function.
+// it is only used by Test_and Test_or Test_semicolon Test_single
+void Semicolon::test()
+{
+    
+}
 
 //this function will recursivly call itself too delete all the pointers
 //of each child node and their children

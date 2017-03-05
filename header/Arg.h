@@ -35,6 +35,8 @@ class Arg : public Base
     //executes the command
     void execute();
     
+    void test();
+    
     //this purpose of this function is to seperate the entire
     //string by the connectors in order to isolate the commands and 
     //arguments

@@ -1,19 +1,19 @@
-#ifndef OR_H
-#define OR_H
-#include "../header/Connectors.h"
+#ifndef TEST_SINGLE_H
+#define TEST_SINGLE_H
 
-//inherits from composite class
-class Or : public Connectors
+//single execute
+class Test_single : public Base
 {
+
     public:
-    // constructor uses composite constructor
-    Or(Base* left, Base* right) : Connectors(left, right) {}
+    Test_single(Base* child);
     
-    // this function will execute the left or right child if the left child 
-    // was not executed
+    
+    //will execute its single child
     void execute();
     
-    
+    // this function is used to execute the test command. this test to see if the 
+    // arguments will pass or fail then return that value;
     void test();
     
     
@@ -21,6 +21,7 @@ class Or : public Connectors
     //string by the connectors in order to isolate the commands and 
     //arguments
     void parse();
+    
     
     //this function will recursivly call itself too delete all the pointers
     //of each child node and their children

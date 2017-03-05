@@ -23,6 +23,12 @@ void Or::execute()
     }   
 }
 
+// this connector type will not make use of the test function.
+// it is only used by Test_and Test_or Test_semicolon Test_single
+void Or::test()
+{
+    
+}
 
 //this purpose of this function is to seperate the entire
 //string by the connectors in order to isolate the commands and 
