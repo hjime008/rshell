@@ -15,6 +15,7 @@ class Connectors : public Base
     // the commands
     virtual void execute() = 0;
     
+    virtual void pipe_execute() = 0;
     
     virtual void test() = 0;
     

@@ -8,15 +8,17 @@
 #include "../header/Test_and.h"
 #include "../header/Test_or.h"
 #include "../header/Test_semicolon.h"
+#include "../header/Pipe.h"
 #include "../header/Arg.h"
 
 #include <iostream>
+#include <fstream>
 #include <string.h>
 #include <stack>
 #include <vector>
 #include <algorithm>
 
-#include  <stdio.h>
+#include <stdio.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -25,6 +27,7 @@
 #include <stdlib.h>
 
 using namespace std;
+
 
 //parse the string data in order to call execute on it
 //this gets rid of spaces and seperates the command from the arguments
@@ -48,12 +51,147 @@ void Arg::final_parse(char *line, char **argv)
     *argv = '\0';                 /* mark the end of argument list  */
 }
 
+void Arg::redirection()
+{
+    int position = 0;
+    string left_side;
+    string right_side;
+    string line;
+    
+    data = data.substr(data.find_first_not_of(" "));
+    
+    if (data.find("<") != string::npos)
+    {
+        position = data.find("<");
+        left_side = data.substr(0, position);
+        right_side = data.substr(position + 1);
+        if (left_side.at(left_side.size() - 1) == ' ')
+        {
+            left_side = left_side.substr(0, left_side.size() - 1);
+        }
+        
+        right_side = right_side.substr(right_side.find_first_not_of(" "));
+        
+        
+        ifstream readfile(right_side.c_str());
+        if (readfile.is_open())
+        {
+            ofstream writefile(left_side.c_str());
+            if (writefile.is_open())
+            {
+                while (getline(readfile, line))
+                {
+                    writefile << line;
+                }
+                
+                writefile.close();
+            }
+            else
+            {
+                cout << "unable to open " << left_side << endl;
+            }
+            
+            readfile.close();
+        }
+        else 
+        {
+            cout << "unable to open " << right_side << endl;
+        }
+        
+            
+    }
+    else if (data.find(">>") != string::npos)
+    {
+        position = data.find(">>");
+        left_side = data.substr(0, position);
+        right_side = data.substr(position + 2);
+        
+        if (left_side.at(left_side.size() - 1) == ' ')
+        {
+            left_side = left_side.substr(0, left_side.size() - 1);
+        }
+        
+        right_side = right_side.substr(right_side.find_first_not_of(" "));
+        
+        ifstream read2file(right_side.c_str());
+        
+        ifstream readfile(left_side.c_str());
+        if (readfile.is_open())
+        {
+            ofstream writefile(right_side.c_str(), ios_base::app);
+            if (writefile.is_open())
+            {
+                while (getline(readfile, line))
+                {
+                    writefile << line;
+                }
+                
+                writefile.close();
+            }
+            else
+            {
+                cout << "unable to open " << right_side << endl;
+            }
+            
+            readfile.close();
+        }
+        else 
+        {
+            cout << "unable to open " << left_side << endl;
+        }
+    }
+    else
+    {
+        position = data.find(">");
+        left_side = data.substr(0, position);
+        right_side = data.substr(position + 1);
+        if (left_side.at(left_side.size() - 1) == ' ')
+        {
+            left_side = left_side.substr(0, left_side.size() - 1);
+        }
+        
+        right_side = right_side.substr(right_side.find_first_not_of(" "));
+        
+        string line;
+        ifstream readfile(left_side.c_str());
+        if (readfile.is_open())
+        {
+            ofstream writefile(right_side.c_str());
+            if (writefile.is_open())
+            {
+                while (getline(readfile, line))
+                {
+                    writefile << line;
+                }
+                
+                writefile.close();
+            }
+            else
+            {
+                cout << "unable to open " << right_side << endl;
+            }
+            
+            readfile.close();
+        }
+        else 
+        {
+            cout << "unable to open " << left_side << endl;
+        }
+    }
+}
+
 
 //executes the command
 void Arg::execute()
 {
     if (data == " ")
     {
+        return;
+    }
+    
+    if (data.find("<") != string::npos || data.find(">") != string::npos || data.find(">>") != string::npos)
+    {
+        redirection();
         return;
     }
     
@@ -92,6 +230,75 @@ void Arg::execute()
         this->executed = true;
     }
 
+}
+
+//executes with pipe
+void Arg::pipe_execute()
+{
+    if (data == " ")
+    {
+        return;
+    }
+    
+    char  line[1024];             /* the input line                 */
+    strcpy(line, data.c_str());
+    char  *argv[64];              /* the command line argument      */
+    
+    final_parse(line, argv);
+    
+    if (strcmp(argv[0], "exit") == 0)  /* is it an "exit"?     */
+        exit(0);            /*   exit if it is                */
+           
+    pid_t  pid;
+    int    status;
+    
+    if (pipe(pipe1) < -1) 
+    {
+        perror("Error:: pipe1 failed\n");
+        exit(1);
+    }
+    
+    if (pipe(pipe2) < -1) 
+    {
+        perror("Error:: pipe2 failed\n");
+        exit(1);
+    }
+    
+    if ((pid = fork()) < 0)  /* fork a child process           */
+    {    
+        perror("Error: fork child failed\n");
+        exit(1);
+    }
+    else if (pid == 0) /* for the child process:         */
+    {
+        // input from pipe1
+        dup2(pipe1[0], 0);
+        // output to pipe2
+        dup2(pipe2[1], 1);
+        // close fds
+        close(pipe1[0]);
+        close(pipe1[1]);
+        close(pipe2[0]);
+        close(pipe2[1]);
+        // exec
+        
+        if (execvp(*argv, argv) < 0) /* execute the command  */
+        {     
+            perror("Error: execution failed\n");
+            exit(1);
+        }
+        
+    }
+    else /* for the parent:      */
+    {                                  
+        while (wait(&status) != pid)/* wait for completion  */
+        {
+            //do nothing
+        }
+        
+        this->executed = true;
+    }
+    
 }
 
 
@@ -951,11 +1158,73 @@ void Arg::parse()
             //do nothing
         }
             
-        
-        
-    
-        
+        //end of checking for test
     }
+    // else if (data.find(" | ") != string::npos)
+    // {
+    //     string left_side;
+    //     string right_side;
+        
+    //     position = data.find(" | ");
+    //     position += 1;
+        
+    //     if (position == 0 && position == data.size() - 1)
+    //     {
+    //         left_side = " ";
+    //         right_side = " ";
+    //     }
+    //     else if (position == 0)
+    //     {
+    //         left_side = " ";
+    //         right_side = data.substr((position + 1));
+    //     }
+    //     else if (position == data.size() - 1)
+    //     {
+    //         left_side = data.substr(0, position);
+    //         right_side = " ";
+    //     }
+    //     else 
+    //     {
+    //         left_side = data.substr(0, position);
+    //         right_side = data.substr((position + 1));   
+    //     }
+        
+    //     if (left_side.at(0) == ' ' && left_side.size() > 1)
+    //     {
+    //         left_side = left_side.substr(1);
+    //     }
+        
+    //     if (right_side.at(0) == ' ' && right_side.size() > 1)
+    //     {
+    //         right_side = right_side.substr(1);
+    //     }
+        
+    //     cout << left_side << endl;
+    //     cout << right_side << endl;
+        
+    //     //found the character then seperated into two strings then make a new 
+    //     //node based on if we are working with the right or left child
+    //     if (parent->left_child == this)
+    //     {
+    //         temp = parent->left_child;
+    //         parent->left_child = new Pipe(new Arg(left_side), new Arg(right_side));
+    //         parent->left_child->parent = temp->parent;
+            
+    //         parent->left_child->left_child->parse();
+    //         parent->left_child->right_child->parse();
+    //     }
+    //     else
+    //     {
+    //         temp = parent->right_child;
+    //         parent->right_child = new Pipe(new Arg(left_side), new Arg(right_side));
+    //         parent->right_child->parent = temp->parent;
+            
+    //         parent->right_child->left_child->parse();
+    //         parent->right_child->right_child->parse();
+    //     }
+        
+    //     delete temp;
+    //}
     else if (data.find(";") != string::npos)
     {
         string left_side;

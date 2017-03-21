@@ -12,6 +12,8 @@ class Test_single : public Base
     //will execute its single child
     void execute();
     
+    void pipe_execute();
+    
     // this function is used to execute the test command. this test to see if the 
     // arguments will pass or fail then return that value;
     void test();

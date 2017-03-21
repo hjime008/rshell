@@ -1,54 +1,43 @@
 #include "../header/Base.h"
 #include "../header/Connectors.h"
-#include "../header/Test_or.h"
-
-
-// this function will execute the left or right child if the left child 
-// was not executed
-void Test_or::execute()
+#include "../header/Pipe.h"
+// this function will execute the left and right child
+void Pipe::execute()
 {
-    test();
+    pipe_execute();
 }
 
-void Test_or::pipe_execute()
-{
-    //do nothing
-}
 
-// this function is used to execute the test command. this test to see if the 
-// arguments will pass or fail then return that value;
-void Test_or::test()
+void Pipe::pipe_execute()
 {
-    left_child->test();
+    left_child->pipe_execute();
+    right_child->pipe_execute();
     
-    if (left_child->executed == false)
-    {
-        right_child->execute();
-        if (right_child->executed == true)
-        {
-            this->executed = true;
-        }
-    }
-    else
+    if (left_child->executed == true || right_child->executed == true)
     {
         this->executed = true;
     }
 }
 
-
 //this purpose of this function is to seperate the entire
 //string by the connectors in order to isolate the commands and 
 //arguments
-void Test_or::parse()
+void Pipe::parse()
 {
     left_child->parse();
     right_child->parse();
 }
 
+// this connector type will not make use of the test function.
+// it is only used by Test_and Test_or Test_semicolon Test_single
+void Pipe::test()
+{
+    // do nothing
+}
 
 //this function will recursivly call itself too delete all the pointers
 //of each child node and their children
-void Test_or::delete_tree(Base* node)
+void Pipe::delete_tree(Base* node)
 {
     if (node->left_child != 0)
     {

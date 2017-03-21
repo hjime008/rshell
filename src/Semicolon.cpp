@@ -15,6 +15,11 @@ void Semicolon::execute()
 }
 
 
+void Semicolon::pipe_execute()
+{
+    //do nothing
+}
+
 //this purpose of this function is to seperate the entire
 //string by the connectors in order to isolate the commands and 
 //arguments

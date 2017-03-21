@@ -9,6 +9,8 @@ class Base
     Base* left_child;
     Base* right_child;
     bool executed;
+    int pipe1[2];
+    int pipe2[2];
     
     // constructor for base
     Base();
@@ -20,6 +22,8 @@ class Base
     // pure virtual fucntion implemented in the subclasses to execute 
     // the commands
     virtual void execute() = 0;
+    
+    virtual void pipe_execute() = 0;
     
     virtual void test() = 0;
     

@@ -13,6 +13,7 @@ class Or : public Connectors
     // was not executed
     void execute();
     
+    void pipe_execute();
     
     void test();
     

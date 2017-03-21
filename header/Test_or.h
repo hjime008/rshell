@@ -13,6 +13,8 @@ class Test_or : public Connectors
     // was not executed
     void execute();
     
+    void pipe_execute();
+    
     // this function is used to execute the test command. this test to see if the 
     // arguments will pass or fail then return that value;
     void test();

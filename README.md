@@ -1,7 +1,7 @@
-Assignment 3 "rshell"
+Assignment 4 "rshell"
 
 //--------------------------------------------------------------------------------------------------
-A basic shell terminal created in C++. This shell is able to run commands passed to executables stored in /bin similar to a native linux shell. Precedence operators and test commands are now implemented
+A basic shell terminal created in C++. This shell is able to run commands passed to executables stored in /bin similar to a native linux shell. Precedence operators and test commands are now implemented in assignment 3. Output redirection, Input redirection, and piping are now implemented in assignment 4. 
 //--------------------------------------------------------------------------------------------------
 
 -Known program bugs:

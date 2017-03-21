@@ -13,6 +13,7 @@ class Semicolon : public Connectors
     // this function will execute the left and right child
     void execute();
     
+    void pipe_execute();
     
     void test();
     

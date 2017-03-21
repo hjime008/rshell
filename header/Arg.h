@@ -31,9 +31,13 @@ class Arg : public Base
     //parse the string data in order to call execute on it
     //this gets rid of spaces and seperates the command from the arguments
     void final_parse(char *line, char **argv);
+    
+    void redirection();
 
     //executes the command
     void execute();
+    
+    void pipe_execute();
     
     void test();
     

@@ -18,6 +18,11 @@ void Single::execute()
     }
 }
 
+void Single::pipe_execute()
+{
+    //do nothing
+}
+
 void Single::test()
 {
     

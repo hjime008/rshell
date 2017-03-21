@@ -13,6 +13,10 @@ class Test_semicolon : public Connectors
     // this function will execute the left and right child
     void execute();
     
+    
+    void pipe_execute();
+    
+    
     // this function is used to execute the test command. this test to see if the 
     // arguments will pass or fail then return that value;
     void test();

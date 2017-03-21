@@ -8,6 +8,11 @@ void Test_semicolon::execute()
     test();
 }
 
+void Test_semicolon::pipe_execute()
+{
+    //do nothing
+}
+
 // this function is used to execute the test command. this test to see if the 
 // arguments will pass or fail then return that value;
 void Test_semicolon::test()

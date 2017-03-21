@@ -14,6 +14,8 @@ class And : public Connectors
     // was executed
     void execute();
     
+    void pipe_execute();
+    
     void test();
     
     //this purpose of this function is to seperate the entire
